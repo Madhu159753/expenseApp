@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Expences</title>
+    <link href="/login.css" rel="stylesheet">
+</head>
+<body>
+    <main> 
+        <h2>Add your item</h2>
+          <form class="product-form"  action="/" method="POST" onsubmit="AddItem(event)">
+             <div class="form-control">
+                <label for="description">Description</label>
+                 <input id="description" type="text" name="description" required/>
+              </div>
+              <div class="form-control">
+                <label for="choose">Add item</label>
+                <select class="product" name="choose" id="name">
+                    <option value="food">Food</option>
+                    <option value="salary">Salary</option>
+                    <option value="fuel">Fuel</option>
+                </select>
+              </div>
+              <div class="form-control">
+                <label for="amount">Amount</label>
+                <input id="amount" type="text" name="amount" required/>
+              </div>
+               <button class="btn" type="submit">Add Now</button>
+         </form>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js"></script>
+         <script>
+         async function AddItem(event){
+            event.preventDefault();
+            const addItem={
+                description:event.target.description.value,
+                choose:event.target.choose.value,
+                amount:event.target.amount.value
+            };
+            console.log(addItem);
+            try{
+              const response=await axios.post("http://localhost:4000/get-expense",addItem)
+              showDetailsOnScreen(res.data.details)  
+              document.body.innerHTML=document.body.innerHTML+'<h1>Done<h1>'
+            }
+            catch(err)
+            {
+               console.log(err)
+            }
+         }
+         function showDetailsOnScreen(user)
+            {
+              const parentNode=document.getElementById('list')
+              const childHTML=`<li id=${user.id}>${user.choose}-${user.description}-${user.amount}
+                <button onclick=deleteExpenses('${user.id}')>Delete Expenses</button>
+                <button onclick=EditExpenses('${user.id}','${user.choose}','${user.description}','${user.amount}')>EditeExpenses</button>
+                </li>`
+                parentNode.innerHTML=parentNode.innerHTML+childHTML;
+            }
+            window.addEventListener("DOMContentLoaded",async()=>{
+                  
+                    try{
+                        const result1=await axios.get("http://localhost:3000/get-data")
+                        console.log(result1.data)
+                        for(var i=0;i<result1.data.allData.length;i++){
+                         showDetailsOnScreen(result1.data.allData[i])
+                        }
+                    }
+                    catch(err){
+                        console.log(err);
+                    }
+                })
+        
+            async function deleteExpenses(userId){
+                    try{
+                        const result2=await axios.delete(`http://localhost:3000/delete-user/${userId}`)
+                        console.log(result2);  
+                         removeUserFromScreen(userId);
+                     }
+                       catch(err)
+                       {
+                         console.log(err);
+                       }
+                }
+               // removeUserFromScreen(userId)
+            
+    
+            function removeUserFromScreen(userId)
+            {
+                const parentNode=document.getElementById('list');
+                const childNodeToBeDeleted=document.getElementById(userId);
+                if(childNodeToBeDeleted){
+                   parentNode.removeChild(childNodeToBeDeleted);
+               }
+            }
+         </script>
+</body>
+</html>
