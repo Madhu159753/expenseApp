@@ -6,7 +6,7 @@ const logindata=require('../model/logindata');
 router.get('/',(req,res,next)=>{
     res.sendFile(path.join(rootDir,'view','signin.html'));
 });
-router.post('/user-signin',async(req,res,next)=>{
+router.post('/user-signup',async(req,res,next)=>{
      try{
      const name=req.body.name;
      const email=req.body.email;
@@ -27,6 +27,29 @@ router.post('/user-signin',async(req,res,next)=>{
      }
 });
 router.get('/user-login',(req,res,next)=>{
-    res.sendFile(path.join(rootDir,'view','logIn.html'));
+    res.sendFile(path.join(rootDir,'view','login.html'));
+});
+router.post('/user-logins',async(req,res,next)=>{
+   try{
+    const email=req.body.email;
+    const password=req.body.password;
+    const user=await logindata.findAll({where:{email}})
+    if(user.length>0){
+        if(user[0].password===password)
+        {
+            res.status(200).json({success:true,message:"user loged in successfuly"})
+        }
+        else{
+         return res.status(400).json({success:false,message:"password is incorrect"})
+        }
+    }
+    else{
+        return res.status(404).json({success:false,message:"user doesn't exist"})
+    }
+   }
+   catch(err)
+   {
+    res.status(500).json({message:err,success:false})
+   }
 })
 module.exports=router;
