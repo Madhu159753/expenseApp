@@ -5,12 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Expences</title>
-    <link href="/login.css" rel="stylesheet">
+    <link href="../public/login.css" rel="stylesheet">
 </head>
 <body>
     <main> 
         <h2>Add your item</h2>
-          <form class="product-form"  action="/" method="POST" onsubmit="AddItem(event)">
+          <form class="product-form"  method="POST" onsubmit="AddItem(event)">
              <div class="form-control">
                 <label for="description">Description</label>
                  <input id="description" type="text" name="description" required/>
@@ -29,6 +29,9 @@
               </div>
                <button class="btn" type="submit">Add Now</button>
          </form>
+         <ul id="list">
+
+         </ul>
           <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js"></script>
          <script>
          async function AddItem(event){
@@ -36,12 +39,15 @@
             const addItem={
                 description:event.target.description.value,
                 choose:event.target.choose.value,
-                amount:event.target.amount.value
+                amount:event.target.amount.value,
+                
             };
             console.log(addItem);
+        
             try{
-              const response=await axios.post("http://localhost:4000/get-expense",addItem)
-              showDetailsOnScreen(res.data.details)  
+              const token=localStorage.getItem('token');
+              const response=await axios.post("http://localhost:4000/get-expense",addItem,{headers: {"Authorization": token}},)
+              showDetailsOnScreen(response.data.Details)  
               document.body.innerHTML=document.body.innerHTML+'<h1>Done<h1>'
             }
             catch(err)
@@ -54,14 +60,16 @@
               const parentNode=document.getElementById('list')
               const childHTML=`<li id=${user.id}>${user.choose}-${user.description}-${user.amount}
                 <button onclick=deleteExpenses('${user.id}')>Delete Expenses</button>
-                <button onclick=EditExpenses('${user.id}','${user.choose}','${user.description}','${user.amount}')>EditeExpenses</button>
                 </li>`
                 parentNode.innerHTML=parentNode.innerHTML+childHTML;
             }
             window.addEventListener("DOMContentLoaded",async()=>{
-                  
+             
                     try{
-                        const result1=await axios.get("http://localhost:3000/get-data")
+                      const token=localStorage.getItem('token');
+              
+                  console.log('123',token);
+                        const result1=await axios.get("http://localhost:4000/get-data", { headers: {"Authorization": token}})
                         console.log(result1.data)
                         for(var i=0;i<result1.data.allData.length;i++){
                          showDetailsOnScreen(result1.data.allData[i])
@@ -74,7 +82,8 @@
         
             async function deleteExpenses(userId){
                     try{
-                        const result2=await axios.delete(`http://localhost:3000/delete-user/${userId}`)
+                      const token=localStorage.getItem('token');
+                        const result2=await axios.delete(`http://localhost:4000/delete-user/${userId}`, {headers :{"Authorization":token}})
                         console.log(result2);  
                          removeUserFromScreen(userId);
                      }
@@ -86,14 +95,14 @@
                // removeUserFromScreen(userId)
             
     
-            function removeUserFromScreen(userId)
-            {
-                const parentNode=document.getElementById('list');
-                const childNodeToBeDeleted=document.getElementById(userId);
+             function removeUserFromScreen(userId)
+             {
+                 const parentNode=document.getElementById('list');
+               const childNodeToBeDeleted=document.getElementById(userId);
                 if(childNodeToBeDeleted){
-                   parentNode.removeChild(childNodeToBeDeleted);
-               }
-            }
+                    parentNode.removeChild(childNodeToBeDeleted);
+                }
+             }
          </script>
 </body>
 </html>
