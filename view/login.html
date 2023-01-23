@@ -1,64 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  
-  <link href="/login.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="../public/login.css" rel="stylesheet">
 </head>
 <body>
-  
-  <main>
-    
-  <h2>Login here</h2>
-              <form class="product-form"  action="/" method="POST" onsubmit="signup(event)">
-          <div class="form-control">
-            <label for="name">Name</label>
-            <input id="name" type="text" name="name" required/>
-            </div>
+
+       <form class="product-form" method="POST" onsubmit="loginData(event)">
             <div class="form-control">
             <label for="email">Email</label>
-            <input id="email" type="text" name="email" required />
+            <input id="email" type="text" name="email" required/>
           </div>
           <div class="form-control">
             <label for="password">Password</label>
             <input id="password" type="password" name="password" required/>
           </div>
-            <button class="btn" type="submit">Login</button>
+            <button class="btn" type="submit">Login Here</button>
         </form>
-      
-  
-  </main>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js"></script>
-  <script>
-     async function signup(event){
-      event.preventDefault();
-      const name=event.target.name.value;
-      const email=event.target.email.value;
-      const password=event.target.password.value;
-      const signupDetails={
-        name,
-        email,
-        password
-      }
-      console.log(signupDetails);
-      try{
-        const response=await axios.post("http://localhost:4000/user-login",signupDetails)
-        if(response.status===201)
-        {
-         window.location.href=""
-        }else{
-          throw new Error('Fail to login');
-        }
-      }
-      catch(err){
-        document.body.innerHTML+=`<div style="color:red">${err}</div>`;
-       }
-     }
+       <a class="btn1" href="ForgotPassword.html"><button type="submit">Forgot password</a></button>
+        <p>New user Sign Up first</p>
+        <p><a href="signin.html">Sign Up</a></p>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js"></script>
+        <script>
+           async function loginData(event){
+              event.preventDefault();
+              const loginObj={
+                email:event.target.email.value,
+                password:event.target.password.value
+              };
+              //console.log(loginObj);
+              try{
+                const response=await axios.post("http://localhost:4000/user-logins",loginObj)
+                alert(response.data.message);
+                console.log(response.data);
+                localStorage.setItem('token',response.data.token)
+                if(response.status===200){
+                window.location.href="addExpence.html"
+              }
+            }
+              catch(err)
+              {
+                
+                //console.log(err);
+                document.body.innerHTML+=`<div style="color:red">${err.message}</div>`;
+              }
+           }
 
-
-  </script>
+        </script>
+        
 </body>
 </html>
