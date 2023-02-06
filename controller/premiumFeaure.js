@@ -68,7 +68,6 @@ exports.AddUserExpenditure=async(req,res)=>{
       order:[['total']],
     });
     res.status(200).json(users)
- //   console.log(users)
    }
    catch(err){
     // console.log(err);

@@ -7,7 +7,6 @@ id:{
     autoIncrement:true,
     allowNull:false,
     primaryKey:true
-
 },
 paymentid:Sequelize.STRING,
 orderid:Sequelize.STRING,

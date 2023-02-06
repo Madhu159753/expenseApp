@@ -26,4 +26,5 @@ const logindata=sequelize.define('login',{
         type:Sequelize.BOOLEAN
     },
 });
+
 module.exports=logindata;

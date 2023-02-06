@@ -9,6 +9,7 @@ try{
     key_id: process.env.RAZORPAY_KEY_ID,
     key_secret: process.env.RAZORPAY_KEY_SECRET
  }) 
+ 
  const amount = 2000;
   rzp.orders.create({amount, currency: "INR"},(err,order)=>{
     if(err){

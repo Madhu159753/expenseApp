@@ -25,4 +25,5 @@ const Additem=sequelize.define('additem',{
         allowNull:true
     },
 });
+
 module.exports=Additem;

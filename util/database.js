@@ -5,4 +5,5 @@ const sequelize=new Sequelize(process.env.MYSQL_SCHEMA,process.env.MYSQL_USER,pr
     dialect:process.env.MYSQL_DIALECT,
     host:process.env.MYSQL_HOS
 });
+
 module.exports=sequelize;

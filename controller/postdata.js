@@ -37,6 +37,7 @@ exports.postDataForSignUp=async(req,res,next)=>{
        })
     }
 };
+
 exports.postLoginData=async(req,res,next)=>{
     try{
         const email=req.body.email;

@@ -2,6 +2,7 @@ const logindata=require('../model/logindata');
 const jwt=require('jsonwebtoken');
 const dotenv=require('dotenv');
 dotenv.config()
+
 exports.authenticate=(req,res,next)=>{
     try{
      const token=req.header('Authorization');

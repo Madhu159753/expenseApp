@@ -41,6 +41,7 @@ exports.deletedata=async(req,res)=>{
      })
     }
  }
+ 
 //  exports.gettingDataOfSingleUser=async(req,res,next)=>{
 //     try{
 //     const user=await Additem.findAll({where:{loginId:req.user.id}});

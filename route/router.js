@@ -11,4 +11,5 @@ router.get('/get-data',authgetuserkey.authenticate,gettingData.gettingDataFromEx
 
 router.delete('/delete-user/:id',authgetuserkey.authenticate,gettingData.deletedata);
 
+
 module.exports=router;

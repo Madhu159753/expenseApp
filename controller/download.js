@@ -22,7 +22,7 @@ function uploadToS3(data,filename){
             Body:data,
             ACL:'public-read'
         }
-       // console.log(params);
+       
         return new Promise((resolve,reject)=>{
             s3bucket.upload(params,(err,s3response)=>{
                 if(err){

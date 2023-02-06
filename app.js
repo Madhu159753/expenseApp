@@ -29,6 +29,7 @@ app.use(premium);
 app.use(premiumFeature);
 app.use(forgotPassword);
 app.use(download);
+
 logindata.hasMany(ForgotPassword);
 ForgotPassword.belongsTo(logindata);
 
