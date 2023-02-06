@@ -34,7 +34,6 @@ ForgotPassword.belongsTo(logindata);
 
 logindata.hasMany(Additem);
 Additem.belongsTo(logindata);
-
 logindata.hasMany(order);
 order.belongsTo(logindata);
 
