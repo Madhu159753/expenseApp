@@ -1,11 +1,13 @@
 const logindata=require('../model/logindata');
 const jwt=require('jsonwebtoken');
+const dotenv=require('dotenv');
+dotenv.config()
 exports.authenticate=(req,res,next)=>{
     try{
      const token=req.header('Authorization');
      console.log(token);
-     const user=jwt.verify(token,'123456789terrace');
-     console.log('loginId------>',user.loginId);
+     const user=jwt.verify(token,process.env.JAVASCRIPT_ACCESSKEY_TOKEN);
+     //console.log('loginId------>',user.loginId);
        logindata.findByPk(user.loginId).then(user =>{
         console.log(JSON.stringify(user));
         req.user=user;
@@ -15,7 +17,7 @@ exports.authenticate=(req,res,next)=>{
      
     }
     catch(err){
-        console.log(err);
+       // console.log(err);
         res.status(401).json({success:false})
 
     }

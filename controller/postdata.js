@@ -2,7 +2,8 @@ const bcrypt=require('bcrypt');
 const logindata=require('../model/logindata');
 const Additem=require('../model/Additem');
 const jwt=require('jsonwebtoken');
-
+const dotenv=require('dotenv')
+dotenv.config()
 function isstringinvalid(string){
     if(string==undefined||string.length===0)
     {
@@ -12,8 +13,8 @@ function isstringinvalid(string){
         return false;
     }
  }
-function generateAccessToken(id){
-     return jwt.sign({loginId:id},'123456789terrace');
+function generateAccessToken(id,ispremiumuser){
+     return jwt.sign({loginId:id,ispremiumuser},process.env.JAVASCRIPT_ACCESSKEY_TOKEN);
  } 
 
 exports.postDataForSignUp=async(req,res,next)=>{
@@ -24,13 +25,13 @@ exports.postDataForSignUp=async(req,res,next)=>{
        }
        const saltrounds=10;
        bcrypt.hash(password,saltrounds,async(err,hash)=>{
-           console.log(err)
+          // console.log(err)
     await logindata.create({name,email,password:hash});
     res.status(201).json({Details:'successfuly creaed new user'});
    })
     }
     catch(err){
-       console.log(err);
+       //console.log(err);
        res.sendStatus(500).json({
            error:err
        })
@@ -51,7 +52,7 @@ exports.postLoginData=async(req,res,next)=>{
                  throw new Error('something went wrong')
              }
              if(result===true){
-             res.status(200).json({success:true,message:"user loged in successfuly",token:generateAccessToken(user[0].id)})
+             res.status(200).json({success:true,message:"user loged in successfuly",token:generateAccessToken(user[0].id,user[0].ispremiumuser)})
              }
          else{
           return res.status(400).json({success:false,message:"password is incorrect"})
@@ -72,13 +73,13 @@ exports.postLoginData=async(req,res,next)=>{
     try
         {
            
-        const {description,choose,amount}=req.body;
+        const {description,choose,amount,expense}=req.body;
     
-   const data= await Additem.create({description,choose,amount,loginId:req.user.id});
-    res.status(201).json({Details:data});
-    }
-    catch(err){
-       console.log(err);
+        const data= await Additem.create({description,choose,amount,expense,loginId:req.user.id});
+        res.status(201).json({Details:data});
+      }
+       catch(err){
+       //console.log(err);
        res.sendStatus(500).json({
            error:err
        })

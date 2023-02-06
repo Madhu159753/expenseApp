@@ -1,21 +1,22 @@
 const Additem=require('../model/Additem');
-const ITEMS_PER_PAGE=2;
+
 exports.gettingDataFromExpense=(req,res,next)=>{
     console.log('getting expenses')
+    const ITEMS_PER_PAGE=2;
     let page=+req.query.page||1;
      let totalItems;
      Additem.count().then((total)=>{
         totalItems=total;
-        return Additem.findAll({offset:(page-1)*ITEMS_PER_PAGE,limit:ITEMS_PER_PAGE})
-     })
+        return Additem.findAll({where:{loginId:req.user.id},offset:(page-1)*ITEMS_PER_PAGE,limit:ITEMS_PER_PAGE})
+            })
       .then((products)=>{
         res.json({
             products:products,
             currentPage:page,
             hasNextPage:ITEMS_PER_PAGE*page<totalItems,
-            nextPage:page+1,
+            nextPage:+page+1,
             hasPreviousPage:page>1,
-            previousPage:page-1,
+            previousPage:+page-1,
             lastPage:Math.ceil(totalItems/ITEMS_PER_PAGE)
 
         })

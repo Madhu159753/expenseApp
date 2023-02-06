@@ -18,7 +18,11 @@ const Additem=sequelize.define('additem',{
     },
     amount:{
         type:Sequelize.INTEGER,
-        allowNull:false
+        allowNull:true
+    },
+    expense:{
+        type:Sequelize.INTEGER,
+        allowNull:true
     },
 });
 module.exports=Additem;
