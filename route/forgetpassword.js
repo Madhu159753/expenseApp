@@ -1,0 +1,8 @@
+const express=require('express');
+const router=express.Router();
+const forgotPasswordConroller=require('../controller/forgotpassword');
+
+ router.post('/forgotPassword',forgotPasswordConroller.forgotpassword)
+router.get('/resetpassword/:id',forgotPasswordConroller.resetpassword )
+router.get('/updatepassword/:resetpassword ',forgotPasswordConroller.updatepassword)
+ module.exports=router;
